@@ -1,0 +1,90 @@
+%% inicio, la clase del documento es iccmemoria.cls
+\documentclass{iccmemoria}
+
+%% datos generales y para la tapa
+\titulo{Título de la memoria}
+\author{Autor}
+\supervisor{Profesor guía}
+\informantes
+	{Profesor Informante 1}
+	{Profesor Informante 2}
+\adicional{(sólo por si se necesita agregar algún otro profesor)}
+\director{Profesor del ramo Memoria de Título}
+\date{mes, año}
+
+\usepackage{verbatim}
+\usepackage[printonlyused]{acronym}
+
+
+
+
+%% inicio de documento
+\begin{document}
+
+%% crea la tapa
+\maketitle
+
+%% dedicatoria
+\begin{dedicatory}
+Dedicado a ...
+\end{dedicatory}
+
+%% agradecimientos
+\begin{acknowledgment}
+Agradecimientos a ...
+\end{acknowledgment}
+
+%% indices
+\tableofcontents
+\listoffigures
+\listoftables
+
+%% resumen
+\begin{resumen}
+Aquí va el resumen (en Castellano)... 
+\end{resumen}
+
+%% abstract
+\begin{abstract}
+Here the abstract...
+\end{abstract}
+
+\chapter{Capítulo 1}
+
+\section{Sección 1}
+
+
+
+\section{Sección 2}
+
+
+\chapter{Capítulo 2}
+\section{Sección 1}
+
+
+
+\section{Sección 2}
+
+
+\chapter{Experimentos}
+
+\chapter{Conclusiones y trabajo futuro}
+\section{Conclusiones}
+\section{Trabajo Futuro}
+
+
+\section*{Glosario}
+\newcommand{\ACRO}{\acro} %to include acronyms in the PDF. (and color
+%\newcommand{\ACRO}{\acrodef}%to hide acronynms list. useful for last version.
+\begin{acronym}[TDMA] %uncomment when using \acro
+\input{acronyms}
+\end{acronym} %uncomment when using \acro\newpage
+
+
+\bibliography{archivodereferencias}
+
+
+\end{document}
+
+   
+

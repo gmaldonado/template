@@ -1,0 +1,471 @@
+%% inicio, la clase del documento es iccmemoria.cls
+\documentclass{iccmemoria}
+
+%% datos generales y para la tapa
+\titulo{Implementación de una herramienta de clasificación basada en árboles neuronales. Caso de estudio: Estabilidad Conformacional de Mutantes del Lisozima Humano}
+\author{Gonzalo Maldonado}
+\supervisor{César Astudillo}
+\informantes
+	{Profesor Informante 1}
+	{Profesor Informante 2}
+\adicional{(sólo por si se necesita agregar algún otro profesor)}
+\director{Profesor del ramo Memoria de Título}
+\date{mes, año}
+
+\usepackage{verbatim}
+\usepackage[printonlyused]{acronym}
+\usepackage{tikz}
+\usetikzlibrary{shapes,arrows}
+\usepackage[spanish]{babel}
+\decimalpoint
+\usepackage{url}
+\usepackage{hyperref}
+
+%\setcounter{tocdepth}{3}
+%\setcounter{secnumdepth}{2}
+
+
+
+%% inicio de documento
+\begin{document}
+
+%% crea la tapa
+\maketitle
+
+%% dedicatoria
+\begin{dedicatory}
+Dedicado a ...
+\end{dedicatory}
+
+%% agradecimientos
+\begin{acknowledgment}
+Agradecimientos a ...
+\end{acknowledgment}
+
+%% indices
+\tableofcontents
+\listoffigures
+\listoftables
+
+%% resumen
+\begin{resumen}
+Aquí va el resumen (en Castellano)... 
+\end{resumen}
+
+%% abstract
+\begin{abstract}
+Here the abstract...
+\end{abstract}
+
+\chapter{Introducción}
+
+\section{Descripción del contexto}
+
+El problema de la agrupación de datos (clustering) es un tipo de aprendizaje \textit{no supervisado} y se basa en la asignación de elementos similares a 
+un mismo grupo, según su nivel de similitud. El estado del arte nos da cuenta de 
+distintos algoritmos de clustering, que utilizan paradigmas diferentes, esto es, usan una amplia variedad de criterios
+para la agrupación de datos. Es importante recalcar que no existe un algoritmo que realice el clustering satisfactoriamente
+para todas las distribuciones de datos, por tanto un ejercicio típico es identificar el algoritmo de 
+clustering que realiza mejor la tarea.
+
+Una de las principales técnicas para resolver problemas de clusterización es \ac{SOM} \cite{Kohonen1995}, el cual típicamente
+se entrena a través de aprendizaje \textit{no supervisado} y tiene por finalidad producir una representación de malla con una 
+dimensionalidad usualmente menor, en comparación a la distribución de datos original.
+
+
+%El problema de Clasificación Estadística o simplemente clasificación, es la tarea aprender una función 
+%matemática $F_{\mathcal{X}\rightarrow \Omega}$ que vincula cada elemento de un conjunto $\mathcal{X}=\{x_1,x_2,\ldots,x_n\}$,
+%a cada una de las categorías predefinidas $\Omega=\{\omega_1,\omega_2,\ldots,\omega_m\}$. Para aprender dicho modelo se 
+%requiere de un algoritmo de clasificación. En \cite{Astudillo2013}, los autores presetaron un mecanismo basado en TTOSOM %ing.utalca.cl/~castudillo
+%que realiza aprendizaje semi-supervisado, i.e., es capaz de aprender de conjuntos de datos para AQUI FALTA 
+
+Por otra parte, la Clasificación Estadística, corresponde a la tarea de asignar una clase o categoría previamente definida a un objeto, basándose en información estadística.
+La Clasificación es un tipo de aprendizaje automático \textit{supervisado}, dado que la información necesaria para construir el modelo de 
+predicción se basa en un conjunto de entrenamiento de instancias, cuyas etiquetas son conocidas de antemano.
+
+Típicamente un algoritmo de clasificación \textit{supervisado}, demanda que \textit{todas} las ins\-tancias de entrenamiento posean su respectiva etiqueta 
+o categoría a la que pertenece. En el caso que existan datos sin 
+etiquetar, los algoritmos de clasificación ``pura'' frecuentemente descartan del modelo aquellas instancias sin etiquetar. 
+Recientemente, los autores de \cite{Astudillo2013} propusieron un mecanismo inspirado en SOM, que utiliza una estructura topológica de árbol y que es 
+capaz de efectuar clasificación incluso en entornos donde existen instancias sin etiquetar. En primer lugar la metodología
+aprende de los datos utilizando un paradigma \textit{no supervisado}, esto es, genera un modelo de la estructura topológica de los datos. Seguidamente, los datos
+etiquetados, son utilizados para construir un modelo de clasificación. Este paradigma de aprendizaje que utiliza datos etiquetados y sin etiquetar
+simultáneamente se conoce como aprendizaje \textit{semi-supervisado}.
+
+
+La \textit{proteómica} es una rama de las ciencias dedicada al estudio a gran escala de las proteínas, con especial énfasis en 
+la funcionalidad y estructura asociada. Consecuentemente, uno de los objetivos principales de la proteómica \textit{aplicada} es 
+el desarrollo de nuevos métodos computacionales que permitan modelar de manera efectiva la propiedades de las proteínas a partir
+de su estructura primaria. La Lisozima (EC 3.2.1.17) es una enzima presente en el cuerpo humano y que hace que las células del
+sistema inmunológico puedan fagocitar a las bacterias de manera más efectiva. 
+
+Según \cite{Caballero2006} la predicción tanto de la estructura como de la estabilidad de las proteínas es fundamental en el área de la biología molecular. Estos estudios se plantean como la creación de experimentos que evalúen la contribución de cada aminoácido a la función y estabilidad de cada proteína (relación entre la secuencia y la disposición tridimensional de los aminoácidos). El rol de cada aminoácido se puede explorar a través de experimentos de mutagénesis. A través de estos se obtiene gran cantidad de datos que adecuadamente procesados pueden brindar información re\-levante sobre las propiedades de interés en las proteínas. Alineado con este tipo de experimentos, se ha incrementado el uso de métodos de simulación computacional orientado a procesar los datos y crear nuevos conocimientos.
+%Inclusive las mutaciones genéticas tienen una directa aplicación en el diseño computacional de proteínas.  
+A pesar de que las simu\-laciones han logrado llevar a cabo predicciones precisas de estabilidades relativas, el costo computacional de los 
+métodos utilizados actualmente tienen una alta demanda en términos computacionales al hacer pruebas con grandes conjuntos de mutantes que se estudian
+en las aplicaciones de diseño de proteínas.
+
+El presente trabajo consiste en la elaboración de una implementación del algoritmo \ac{TTOSOM} para predecir la estabilidad de mutantes del Lisozima Humano a partir de su respectiva estructura secuencial de aminoácidos.
+
+
+
+\section{Objetivos}
+
+\subsection{Objetivo general}
+    \begin{enumerate}
+      \item  Generar un modelo computacional utilizando el algoritmo TTOSOM, para predecir la estabilidad de Mutantes del Lisozima Humano a partir de información histórica.
+    \end{enumerate}
+  \subsection{Objetivos específicos}
+    \begin{enumerate}
+      %\item Implementación de herramienta Open-Source
+      \item Recopilar la literatura asociada a proteómica, específicamente el fenómeno de la predicción de estabilidad de distintos mutantes del lisozima.
+      \item Implementar algoritmo TTOSOM definido en \cite{Astudillo2011}, incluyendo las capacidades de clustering y clasificación \cite{Astudillo2009a,Astudillo2011,Astudillo2013}. % on achieving semi-supervised pattern recognition ing.utalca.cl/~castudillo
+
+      \item
+      Aplicar el clasificador \textit{semi-supervisado} TTOSOM para predecir la estabilidad de un conjunto de mutantes de lisozima. Se asume una escacez de instancias de lisozima con estabilidad conocida, i.e., la cantidad de instancias etiquetadas es mucho menor que las instancias cuya categoría se intenta predecir. Este experimento considera una variación sistemática en la cantidad de los datos etiquetados para la construcción del clasificador TTOSOM y la medición de la capacidad predicción resultante. 
+      
+      %con sus valores de estabilidad con variaciones en la dimensión de los datos (relación entre los datos entrenados y los datos a predecir). 
+
+      \item
+      Utilizar el clasificador puramente supervisado \ac{SVM} para predecir la estabilidad del conjunto de mutantes de lisozima y comparar su desempeño con el algoritmo TTOSOM. Se espera que TTOSOM muestre un mejor desempeño cuando la cardinalidad del conjunto de datos etiquetados es limitado.
+      
+  %      \item Identificar conjuntos de datos pertinentes de secuencias de aminoácidos para ser evaluados por el algoritmo de clasificación.
+      
+     % \item Evaluar la predicción de TTOSOM sobre el conjunto de datos de aminoácidos utilizando índices pertinentes.
+    
+    \item
+    Analizar si el método TTOSOM se perfila como una herramienta útil en el desarrollo de modelos predictivos de estabilidad de proteínas, detallando sus ventajas y desventajas.     
+    
+    \end{enumerate}
+
+%b) realizar el mismo experimento (variación en la dimensión de los datos) con otro método predictivo (Ej: SVM), con el objetivo de mostrar el mejor performance del método TTOSOM como herramienta predictiva (se espera que sea mejor cuando se reduce la dimensión del conjunto de entrenamiento), c) Analizar si el método TTOSOM se perfila como una herramienta útil en el desarrollo de modelos predictivos de estabilidad de proteínas (Ventajas y desventajas).     
+    
+\newpage
+
+\section{Alcance del trabajo a realizar}
+
+
+  A continuación se detallan los elementos que acotan el presente proyecto:
+  
+  \begin{itemize}
+   \item Investigar acerca de los mecanismo de predicción de estabilidad de aminoácidos incluido en la  bases de datos de revistas científicas de alto impacto publicadas en los últimos 20 años.
+   \item Implementación de un modelo computacional en Java del TTOSOM y sus funcionalidades descritas en \cite{Astudillo2009a,Astudillo2011,Astudillo2013}.
+     %2009 es el paper 7 de mi pagina (bibtex)
+  Esta implementación utilizará la metodología ágil de desarrollo \ac{TDD} \cite{Beck2003} %[]
+  , y consecuentemente, considera un conjunto
+de casos de prueba exhaustivos para cada sub-módulo desarrollado, así como la documentación respectiva.
+  \item El código fuente y la documentación asociada serán de dominio público.
+  \item El desarrollo del modelo se realizará utilizando control de versiones.
+  \end{itemize}
+
+
+
+\newpage
+
+\chapter{Marco Teórico}
+
+\section{Introducción}
+En este capítulo se incluye una revisión literaria exhaustiva de todos los conceptos necesarios para entender el desarrollo
+de la tesis propuesta. Se divide en cuatro partes. Primero abordamos los conceptos escenciales de aprendizaje de máquina. Seguidamente,
+describimos en forma detallada el algoritmo \acf{SOM}. La sección subsecuente explica el algoritmo central de esta tesis, esto es, el 
+método \acf{TTOSOM}.
+Finalmente se incluye una sección especial describiendo el dominio de aplicación, en este caso Estabilidad Conformacional de Mutantes del Lisozima Humano.
+
+\section{Aprendizaje de Máquina}
+
+El Aprendizaje de Máquina es una rama de la \acf{AI} que estudia
+algoritmos que pueden aprender de forma automática en base a su experiencia \cite{Mitchell1997}.
+Dependiendo de la información conocida por el sistema, el aprendizaje de máquina puede dividirse en una serie de 
+categorías, entre las cuales figuran el Aprendizaje \textit{supervisado, no supervisado} y \textit{semi-supervisado}. A
+continuación se describen cada uno de ellos.
+
+\subsection{Aprendizaje supervisado}
+
+El aprendizaje supervisado es el estudio de algoritmos que razonan gracias a instancias suministradas de manera externa, para
+generar hipótesis generales y realizar predicciones de instancias futuras \cite{Kotsiantis2007}. En el aprendizaje supervisado
+se provee un conjunto de muestras, junto con sus categorías (clases) formando el llamado ``conjunto de entrenamiento''. El aprendizaje 
+supervisado analiza el conjunto de entrada y produce una función que es capaz de asignar una clase a una nueva instancia.
+
+
+\subsubsection{Clasificación estadística}
+
+\subsection{Aprendizaje no supervisado}
+
+En el aprendizaje no supervisado se desea conocer la estructura de una distribución de datos para los cuales se 
+desconoce su naturaleza de pertenencia. Esto a un escenario más complejo que el caso del 
+aprendizaje supervisado debido a que las relaciones que gobiernan
+a los datos deben ser inferidas por el algoritmo. 
+
+
+Existen razones importantes para considerar el aprendizaje no supervisado, por ejemplo el alto costo de recolectar
+y etiquetar grandes cantidades de muestras. Como se menciona en \cite{AstudilloThesis} la naturaleza intrínseca de 
+las clases pertenecientes a las muestras podrían ser dinámicas, por lo que el aprendizaje no supervisado se presenta como una estrategia más adecuada
+para adaptarse al modelo de acuerdo a los cambios en la distribución de los datos. 
+
+\subsubsection{Agrupamiento de datos}
+
+El agrupamiento de datos o \textit{clustering} es la tarea encargada de organizar muestras de un conjunto de datos no etiquetados en distintos grupos
+según su nivel de similitud. Como se menciona en \cite{Jain1999} el clustering resulta 
+útil en áreas como la toma de decisiones, minería de datos, recuperación de documentos, segmentación de 
+imágenes, etc. Sin embargo en estas situaciones existe poca información previa acerca de los datos y se debe intentar
+reducir al máximo la cantidad de suposiciones. En estas situaciones puede resultar útil el 
+clustering, para así explorar las relaciones entre los datos y tener una mejor apreciación de la estructura de estos.
+
+En \cite{Jain1999} se menciona la siguiente notación para el clustering:
+
+\begin{itemize}
+ \item 	Un patrón $\mathbf{x}$ es un item utilizado por el algoritmo de clustering. Típicamente es considerado un vector $d$-dimensional
+	de la forma $\mathbf{x}= (x_1, ..., x_d)$
+\end{itemize}
+
+
+Los algoritmos \acf{SOM} y \acf{TTOSOM} que son estudiados en esta memoria son capaces de realizar agrupamiento de datos.
+
+\subsection{Aprendizaje semi-supervisado}
+
+
+
+\subsection{Maldición de la dimensionalidad}
+
+La maldición de la dimensionalidad es un fenómeno que se produce cuando se están organizando y analizando datos que se encuentran 
+en espacios con alta dimensionalidad (cientos o miles) y que normalmente no ocurren en espacios con baja dimensión. A medida que 
+la dimensionalidad aumenta los datos se vuelven muy dispersos en el espacio. Las definiciones de densidad y distancia 
+entre los puntos, esencial en el agrupamiento de datos, se vuelve menos significativa. Esto requiere aclaración. Técnicamente, 
+las funciones de distancia como la Euclideana poseen la propiedad de discriminar entre objetos cercanos y lejanos. Esto es, objetos que se 
+encuentran cerca en el espacio están asociados a distancias con magnitud pequeña, mientras que elementos distantes en el espacio están asociados 
+a magnitudes grandes. Desafortunadamente, esta característica no se preserva en espacios de alta dimensionalidad. Para aliviar
+esta situación los investigadores han desarrollado una serie de técnicas, entre las cuales figura la llamada reducción de la dimensionalidad,
+en donde los puntos del espacio original son transformados a un espacio de menor dimensión que preserva la topología de los datos. 
+La representación reducida de los datos en una dimensionalidad menor puede ser usada para efectuar aprendizaje a partir de los datos 
+de manera efectiva.
+%Lo anterior tiene como consecuencia que el proceso de clasificación de datos se vuelve una tarea aún más compleja. 
+
+\section{Self-Organizing Maps}
+
+\section{Tree-based Topology-Oriented SOM}
+
+\subsection{Algoritmo}
+\subsection{Rotaciones condicionales}
+\subsection{Clasificador semi-supervisado}
+
+\section{Lisozima, mutantes, predicción, estabilidad ??}
+
+\chapter{Metodología de Desarrollo}
+
+
+\hfill
+\begin{minipage}[t]{9cm}
+\flushright
+\textit{``Time travel is also useful for reproducing bugs''}
+James Shore\\
+\end{minipage}
+\newline
+\newline
+
+Este capítulo detalla la metodología de desarrollo utilizada a lo largo de esta memoria, se incluye aspectos de implementación, control de versiones y pruebas. 
+\section{Implementación}
+
+A continuación se mencionan las herramientas de desarrollo de software utilizadas para resolver la problemática de esta memoria. 
+
+\subsection{Java}
+
+Java es un lenguaje de programación de propósito general, concurrente, fuertemente tipado, basado en clases y orientado a objetos, que está
+disponible públicamente desde el año 1995 y que actualmente pertenece a Oracle. Su versión más reciente es la 1.7.
+
+Java hereda su sintáxis de lenguajes como C y C++, pero posee un mayor nivel de abstracción. El código se compila en \textit{bytecode},
+que es un código intermedio, el cual es interpretado por la \ac{JVM}, independizando el código de la arquitectura en la que se está ejecutando.
+
+La JVM ejecuta programas como si fuera una máquina real y tiene una implementación distinta para cada sistema
+operativo. Lo anterior tiene por finalidad permitir a los desarrolladores compilar una sola vez y luego ejecutar el programa independientemente del 
+dispositivo que esté siendo utilizado, por ejemplo en distintas arquitecturas de computadores de escritorio, tablets, celulares, etc.
+
+Otra característica fundamental de Java es la administración automática de la memoria, a cargo de una entidad
+llamada \textit{recolector de basura} que es el encargado de eliminar objetos que no se encuentren en uso.
+
+
+\subsection{Integrated Development Environment (IDE)}
+
+Un Entorno de Desarrollo Integrado (IDE) es una aplicación que provee herramientas de desarrollo de software a los programadores. Normalmente un IDE consta de un editor de código, 
+un compilador y un depurador.
+
+Un IDE está diseñado para ayudar a los desarrolladores a trabajar más rápido y de manera más 
+amigable, proporcionando herramientas tales como indicación explícita de errores, depuración de código, completación de automática de código, etc. 
+
+En esta memoria se trabaja con Netbeans, que es un IDE de código abierto, gratuito y multiplataforma, fundado en el año 2000 por Sun Microsystems, 
+originalmente diseñado para trabajar con Java y que además soporta otros lenguajes como C, C++, PHP, etc.
+
+
+Netbeans permite a las aplicaciones un importante nivel de modularidad, dado que se pueden extender con distintos 
+componentes de software. A su vez estos módulos pueden ser invocados de manera independiente e incorporados 
+en alguna aplicación que se desarrolle. 
+
+
+
+
+\section{Control de Versiones}
+
+Un sistema de Control de Versiones provee un repositorio central el cual ayuda a coordinar los cambios que se realizan a los distintos 
+archivos de un proyecto y también se encarga de proporcionar un historial de cambios \cite{Shore2007}.
+
+Sin el control de versiones muchas veces podemos causar que el código se encuentre disperso entre distintas máquinas, 
+discos, etc. Es importante llevar un orden del código, dado que agiliza integraciones con la última versión del proyecto o archivos.
+Un proyecto que trabaje con control de versiones adquiere una respuesta al cambio más eficiente.
+
+El control de versiones consiste en un proceso donde los desarrolladores obtienen el código del repositorio central, realizan sus cambios,
+llevan a cabo las pruebas y finalmente se aseguran de que la integración sea exitosa. Por lo que se produce un 
+proceso de mejora continua durante el desarrollo del proyecto.
+
+Algunos de los conceptos fundamentales del control de versiones son los que se nombran a continuación:
+
+\begin{itemize}
+ \item \textbf{Repositorio central:} Es el lugar de almacenamiento maestro, donde se guardan todos los archivos en conjunto con su historial.
+  \item \textbf{Repositorio local:} Hace referencia a la copia local en la máquina del desa\-rrollador.
+  \item \textbf{Commit:} Acción que comprueba los archivos en el repositorio local y los guarda dentro del repositorio central.
+  \item \textbf{Branch:} Ramificaciones del repositorio central en las cuales se mantienen variaciones del código original. Se pueden crear múltiples
+			  ramificaciones en un proyecto.
+  \item \textbf{Merge: } Proceso en el cual se mezclan los cambios y se resuelven los conflictos.
+\end{itemize}
+
+
+Uno de los usos más poderosos y prácticos del control de versiones es que podemos ``viajar en el tiempo'', reconstruyendo
+el repositorio local con los archivos del proyecto en un momento particular del pasado. Esto 
+nos pemite realizar un mejor proceso de depuración. Como instancia, al realizar el desarrollo
+de pruebas se puede producir un error en el código (bug), y aquí puede resultar útil conocer las diferencias
+del código actual con versiones antiguas, facilitando la identificación de las causas del problema. 
+
+En resumen, el control de versiones es una herramienta que agiliza el proceso de desarrollo de los proyectos y que es utiilizada
+frecuentemente para llevar a cabo pruebas y a su vez mantener un historial de cambios. 
+
+\section{Test Driven Development (TDD)}
+
+ Test Driven Development (TDD) es una metodología de desarrollo ágil que sirve para llevar a cabo pruebas, codificación y refactorización.
+ Inicialmente se escriben casos de prueba que el software es incapaz de resolver efectivamente debido a que la implementación
+ de los módulos no existe. Estos casos son utilizados como criterios de aceptación al 
+ agregar una nueva funcionalidad o una mejora al sistema. Se realiza un proceso iterativo en el que 
+ se refina el código hasta que todas las pruebas son aceptadas. El supuesto realizado por la metodología
+ es que el software está correcto si es que logra resolver todos los casos de prueba de manera exitosa. Cuando se utiliza de forma apropiada, también ayuda
+ a mejorar aspectos de diseño y previene errores a futuro \cite{Shore2007}.
+
+ 
+TDD consta de seis pasos escenciales: 
+
+\begin{enumerate}
+ \item \textbf{Agregar una prueba:} El desarrollador debe comprender completamente la funcionalidad que desea implementar, 
+ razón por la cual se escribe inicialmente un caso de prueba que no puede
+ ser satisfecho.%, y posteriormente se lleva a cabo la implementación necesaria para aprobarlo.
+
+ \item \textbf{Ejecutar todas las pruebas:} Se ejecutan nuevamente todas las pruebas y se corrobora
+ que la nueva funcionalidad agregada no interviene en el código ya existente.
+ \item \textbf{Escribir código:} Implica escribir el mínimo código necesario para aceptar la prueba. 
+ \item \textbf{Ejecutar las pruebas y ver si tienen éxito:} Con esto se puede verificar que se cumple con todos los requisitos implementados.
+ \item \textbf{Refactorizar el código:} Una vez que se tiene la funcionalidad requerida, se debe realizar un refinamiento del código aplicando los patrones de diseño necesarios.
+ \item \textbf{Repetir:} Una vez que se desea agregar una nueva funcionalidad se debe repetir el proceso.
+\end{enumerate}
+
+Esta metodología se encarga de verificar que el código cumple con los requisitos 
+que el desarrollador especifica a través de los casos de prueba. Si algo sale mal se espera que existan sólo unas pocas líneas que verificar, lo que
+facilita el trabajo para encontrar y reparar errores. Como un beneficio adicional del proceso, las pruebas pueden ser utilizadas 
+como documentación.
+
+ 
+\begin{comment}
+ 
+
+% Aquí se definen los tipos de bloques que se tendrán en el diagrama de flujo
+\tikzstyle{decision} = [diamond, draw, text width=4em, text centered, node distance=3cm, inner sep=0pt]
+\tikzstyle{block} = [rectangle, draw, text width=10em, text centered, rounded corners, minimum height=4em]
+\tikzstyle{line} = [draw, -latex']
+
+\begin{figure}
+  \centering
+  \begin{tikzpicture}[label/.append style={align=center},every node/.style={scale=0.67},node distance = 4cm, auto]
+      % Nodos
+      \node [block] (init) {(Re) Escribir un test};
+      \node [decision, below right of=init, node distance=5cm] (identify) {Ejecutar prueba};
+      \node [block, below right of=identify, node distance=4cm] (evaluate) {Escribir código};
+      \node [decision, below right of=evaluate, node distance=5.5cm] (decide) {Ejecutar todas las pruebas};
+      \node [block, below right of=decide, node distance=7cm] (stop) {Limpiar el código};
+      
+      % Aristas
+      \path [line] (init) |- (identify);
+      \path [line] (identify) |- (evaluate);
+      \path [line] (evaluate) |- node[below]{Prueba fallida}(decide);
+      \path [line] (decide) |- node[below]{Todas las pruebas exitosas}(stop);
+      \path [line,dashed] (stop) |-  node[above]{Repetir}(init);
+      \path [line] (identify) |- node[above] {Prueba exitosa}(init);
+      \path [line] (decide) |- node[above]{Prueba(s) fallidas}(evaluate);
+	  
+  \end{tikzpicture}
+  \caption{Test Driven Development}
+  \label{fig:TDD}
+\end{figure}
+\end{comment}
+
+
+\chapter{Experimentos}
+
+\chapter{Conclusiones y trabajo futuro}
+\section{Conclusiones}
+\section{Trabajo Futuro}
+
+
+\begin{comment}
+%% contenido del tercer capítulo
+\chapter{Tercer Capítulo}
+Sólo para incluir figuras y tablas.
+\begin{figure}[h]
+  \vspace*{1cm}
+  (aqui debiera ir la figura)
+  \vspace*{1cm}
+  \caption{La primera figura de la memoria}
+\end{figure}
+\begin{table}[h]
+  \vspace*{1cm}
+  (aqui debiera ir la tabla)
+  \vspace*{1cm}
+  \caption{La primera tabla de la memoria}
+\end{table}
+\end{comment}
+
+\section*{Glosario}
+\newcommand{\ACRO}{\acro} %to include acronyms in the PDF. (and color
+%\newcommand{\ACRO}{\acrodef}%to hide acronynms list. useful for last version.
+\begin{acronym}[TDMA] %uncomment when using \acro
+\input{../acronyms}
+\end{acronym} %uncomment when using \acro\newpage
+
+
+%% genera las referencias
+\bibliography{../ref/GonzaloMaldonado}
+
+\begin{comment}
+%% comienzo de la parte de anexos
+\appendixpart
+
+%% contenido del primer anexo
+\appendix{El Primer Anexo}
+Aquí va el texto del primer anexo...
+
+\section{La primera sección del primer anexo}
+Aquí va el texto de la primera sección del primer anexo...
+
+\section{La segunda sección del primer anexo}
+Aquí va el texto de la segunda sección del primer anexo...
+
+\subsection{La primera subsección de la segunda sección del primer anexo}
+
+
+%% contenido del segundo anexo
+\appendix{El segundo Anexo}
+Aquí va el texto del segundo anexo...
+
+\section{La primera sección del segundo anexo}
+Aquí va el texto de la primera sección del segundo anexo...
+
+%% fin
+\end{comment}
+
+\end{document}
+
+   
+
